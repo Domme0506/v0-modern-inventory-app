@@ -1,0 +1,28 @@
+import type React from "react"
+import type { Metadata } from "next"
+import { Inter } from "next/font/google"
+import "./globals.css"
+import Navbar from "@/components/navbar"
+
+const inter = Inter({ subsets: ["latin"] })
+
+export const metadata: Metadata = {
+  title: "Inventarverwaltung",
+  description: "Moderne Inventarverwaltung für Schränke und Regale",
+    generator: 'v0.dev'
+}
+
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode
+}) {
+  return (
+    <html lang="de">
+      <body className={`${inter.className} min-h-screen bg-gray-50`}>
+        <Navbar />
+        <main className="container mx-auto px-4 py-8">{children}</main>
+      </body>
+    </html>
+  )
+}
