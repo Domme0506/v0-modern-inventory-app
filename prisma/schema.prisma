@@ -3,12 +3,14 @@
 
 generator client {
   provider = "prisma-client-js"
+  // Fügen Sie diese Zeile hinzu, um sicherzustellen, dass der Client korrekt generiert wird
+  output   = ".prisma/client"
 }
 
 datasource db {
   provider  = "postgresql"
   url       = env("DATABASE_URL")
-  directUrl = env("POSTGRES_URL_NON_POOLING") // Used for migrations
+  directUrl = env("POSTGRES_URL_NON_POOLING") // Für Migrationen verwendet
 }
 
 model Item {

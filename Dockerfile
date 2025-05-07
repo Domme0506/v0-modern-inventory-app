@@ -39,4 +39,8 @@ EXPOSE 3000
 COPY --chown=nextjs:nodejs docker-entrypoint.sh ./
 RUN chmod +x docker-entrypoint.sh
 
+RUN npx prisma generate
+RUN npm run build
+
+
 ENTRYPOINT ["./docker-entrypoint.sh"]
