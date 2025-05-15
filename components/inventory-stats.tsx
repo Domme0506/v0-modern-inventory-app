@@ -1,5 +1,5 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { ArrowDown, ArrowUp, DollarSign, Package, ShoppingCart } from "lucide-react"
+import { ArrowDown, ArrowUp, Package, ShoppingCart } from "lucide-react"
 
 interface StatsProps {
   stats: {
@@ -12,7 +12,7 @@ interface StatsProps {
 
 export function InventoryStats({ stats }: StatsProps) {
   return (
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
       <Card>
         <CardHeader className="flex flex-row items-center justify-between pb-2">
           <CardTitle className="text-sm font-medium">Total Products</CardTitle>
@@ -33,17 +33,6 @@ export function InventoryStats({ stats }: StatsProps) {
               </span>
             )}
           </p>
-        </CardContent>
-      </Card>
-
-      <Card>
-        <CardHeader className="flex flex-row items-center justify-between pb-2">
-          <CardTitle className="text-sm font-medium">Inventory Value</CardTitle>
-          <DollarSign className="h-4 w-4 text-gray-500 dark:text-gray-400" />
-        </CardHeader>
-        <CardContent>
-          <div className="text-2xl font-bold">${stats.totalValue.toLocaleString()}</div>
-          <p className="text-xs text-gray-500 dark:text-gray-400">Updated just now</p>
         </CardContent>
       </Card>
 

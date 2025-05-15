@@ -52,7 +52,6 @@ export async function getInventoryStats(): Promise<InventoryStats> {
     console.error("Error fetching inventory stats:", error)
     return {
       totalProducts: 0,
-      totalValue: 0,
       lowStock: 0,
       changePercentage: 0,
     }

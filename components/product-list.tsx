@@ -5,7 +5,6 @@ import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-import { Badge } from "@/components/ui/badge"
 import { Edit, Search, Trash2 } from "lucide-react"
 import { useProducts } from "@/hooks/use-products"
 
@@ -14,11 +13,7 @@ export function ProductList() {
   const { products, isLoading, deleteProduct } = useProducts()
   const [searchQuery, setSearchQuery] = useState("")
 
-  const filteredProducts = products.filter(
-    (product) =>
-      product.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      product.sku.toLowerCase().includes(searchQuery.toLowerCase()),
-  )
+  const filteredProducts = products.filter((product) => product.name.toLowerCase().includes(searchQuery.toLowerCase()))
 
   const handleDelete = async (id: string) => {
     if (confirm("Are you sure you want to delete this product?")) {
@@ -52,17 +47,14 @@ export function ProductList() {
             <TableHeader>
               <TableRow>
                 <TableHead>Name</TableHead>
-                <TableHead>SKU</TableHead>
-                <TableHead>Category</TableHead>
                 <TableHead className="text-right">Stock</TableHead>
-                <TableHead className="text-right">Price</TableHead>
                 <TableHead className="text-right">Actions</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {filteredProducts.length === 0 ? (
                 <TableRow>
-                  <TableCell colSpan={6} className="text-center py-8 text-gray-500 dark:text-gray-400">
+                  <TableCell colSpan={3} className="text-center py-8 text-gray-500 dark:text-gray-400">
                     No products found
                   </TableCell>
                 </TableRow>
@@ -70,16 +62,11 @@ export function ProductList() {
                 filteredProducts.map((product) => (
                   <TableRow key={product.id}>
                     <TableCell className="font-medium">{product.name}</TableCell>
-                    <TableCell>{product.sku}</TableCell>
-                    <TableCell>
-                      <Badge variant="outline">{product.category}</Badge>
-                    </TableCell>
                     <TableCell className="text-right">
                       <span className={product.stock < 10 ? "text-red-600 dark:text-red-400" : ""}>
                         {product.stock}
                       </span>
                     </TableCell>
-                    <TableCell className="text-right">${product.price.toFixed(2)}</TableCell>
                     <TableCell className="text-right">
                       <div className="flex justify-end gap-2">
                         <Button variant="ghost" size="icon" onClick={() => router.push(`/products/${product.id}/edit`)}>

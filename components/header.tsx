@@ -1,7 +1,7 @@
 import Link from "next/link"
 import { ThemeToggle } from "@/components/theme-toggle"
 import { Button } from "@/components/ui/button"
-import { Package, Plus, Settings, User } from "lucide-react"
+import { Package, Plus, Settings } from "lucide-react"
 
 export function Header() {
   return (
@@ -22,10 +22,6 @@ export function Header() {
 
           <Link href="/settings" className="text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white">
             <Settings className="h-5 w-5" />
-          </Link>
-
-          <Link href="/profile" className="text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white">
-            <User className="h-5 w-5" />
           </Link>
 
           <ThemeToggle />
