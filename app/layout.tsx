@@ -1,28 +1,20 @@
-import type React from "react"
-import type { Metadata } from "next"
-import { Inter } from "next/font/google"
-import "./globals.css"
-import Navbar from "@/components/navbar"
-
-const inter = Inter({ subsets: ["latin"] })
+import type { Metadata } from 'next'
+import './globals.css'
 
 export const metadata: Metadata = {
-  title: "Inventarverwaltung",
-  description: "Moderne Inventarverwaltung für Schränke und Regale",
-    generator: 'v0.dev'
+  title: 'v0 App',
+  description: 'Created with v0',
+  generator: 'v0.dev',
 }
 
 export default function RootLayout({
   children,
-}: {
+}: Readonly<{
   children: React.ReactNode
-}) {
+}>) {
   return (
-    <html lang="de">
-      <body className={`${inter.className} min-h-screen bg-gray-50`}>
-        <Navbar />
-        <main className="container mx-auto px-4 py-8">{children}</main>
-      </body>
+    <html lang="en">
+      <body>{children}</body>
     </html>
   )
 }
