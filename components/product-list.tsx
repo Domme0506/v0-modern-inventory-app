@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
+import { Badge } from "@/components/ui/badge"
 import { Edit, Search, Trash2 } from "lucide-react"
 import { useProducts } from "@/hooks/use-products"
 
@@ -19,6 +20,13 @@ export function ProductList() {
     if (confirm("Are you sure you want to delete this product?")) {
       await deleteProduct(id)
     }
+  }
+
+  const formatStorageLocation = (product: any) => {
+    if (!product.storageLocation) return "Not set"
+
+    const { position, height, side } = product.storageLocation
+    return `${position} (${height} ${side})`
   }
 
   return (
@@ -47,6 +55,7 @@ export function ProductList() {
             <TableHeader>
               <TableRow>
                 <TableHead>Name</TableHead>
+                <TableHead>Storage Location</TableHead>
                 <TableHead className="text-right">Stock</TableHead>
                 <TableHead className="text-right">Actions</TableHead>
               </TableRow>
@@ -54,7 +63,7 @@ export function ProductList() {
             <TableBody>
               {filteredProducts.length === 0 ? (
                 <TableRow>
-                  <TableCell colSpan={3} className="text-center py-8 text-gray-500 dark:text-gray-400">
+                  <TableCell colSpan={4} className="text-center py-8 text-gray-500 dark:text-gray-400">
                     No products found
                   </TableCell>
                 </TableRow>
@@ -62,6 +71,9 @@ export function ProductList() {
                 filteredProducts.map((product) => (
                   <TableRow key={product.id}>
                     <TableCell className="font-medium">{product.name}</TableCell>
+                    <TableCell>
+                      <Badge variant="outline">{formatStorageLocation(product)}</Badge>
+                    </TableCell>
                     <TableCell className="text-right">
                       <span className={product.stock < 10 ? "text-red-600 dark:text-red-400" : ""}>
                         {product.stock}
