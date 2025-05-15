@@ -1,17 +1,11 @@
 import { NextResponse } from "next/server"
-import type { Product } from "@/lib/types"
-
-// This is a reference to the in-memory database from the products route
-// In a real app, you would use a database like MongoDB, PostgreSQL, etc.
-declare global {
-  var products: Product[]
-}
+import { getProducts } from "@/lib/store"
 
 export async function GET() {
   // Simulate network delay
   await new Promise((resolve) => setTimeout(resolve, 700))
 
-  const products = global.products || []
+  const products = getProducts()
 
   const totalProducts = products.length
   const lowStock = products.filter((product) => product.stock < 10).length

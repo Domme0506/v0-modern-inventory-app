@@ -5,13 +5,16 @@ import type { Product } from "./types"
 
 export async function createProduct(data: Omit<Product, "id" | "createdAt" | "updatedAt">) {
   try {
-    const response = await fetch(`${process.env.VERCEL_URL || "http://localhost:3000"}/api/products`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
+    const response = await fetch(
+      `${process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "http://localhost:3000"}/api/products`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
       },
-      body: JSON.stringify(data),
-    })
+    )
 
     if (!response.ok) {
       throw new Error("Failed to create product")
@@ -25,15 +28,18 @@ export async function createProduct(data: Omit<Product, "id" | "createdAt" | "up
   }
 }
 
-export async function updateProduct(id: string, data: Omit<Product, "id" | "createdAt" | "updatedAt">) {
+export async function updateProduct(id: string, data: Partial<Product>) {
   try {
-    const response = await fetch(`${process.env.VERCEL_URL || "http://localhost:3000"}/api/products/${id}`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
+    const response = await fetch(
+      `${process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "http://localhost:3000"}/api/products/${id}`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
       },
-      body: JSON.stringify(data),
-    })
+    )
 
     if (!response.ok) {
       throw new Error("Failed to update product")
@@ -50,9 +56,12 @@ export async function updateProduct(id: string, data: Omit<Product, "id" | "crea
 
 export async function deleteProduct(id: string) {
   try {
-    const response = await fetch(`${process.env.VERCEL_URL || "http://localhost:3000"}/api/products/${id}`, {
-      method: "DELETE",
-    })
+    const response = await fetch(
+      `${process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "http://localhost:3000"}/api/products/${id}`,
+      {
+        method: "DELETE",
+      },
+    )
 
     if (!response.ok) {
       throw new Error("Failed to delete product")

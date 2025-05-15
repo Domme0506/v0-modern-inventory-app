@@ -2,7 +2,7 @@ import type { InventoryStats, Product } from "./types"
 
 export async function getProducts(): Promise<Product[]> {
   try {
-    const response = await fetch(`${process.env.VERCEL_URL || "http://localhost:3000"}/api/products`, {
+    const response = await fetch("/api/products", {
       cache: "no-store",
     })
 
@@ -19,7 +19,7 @@ export async function getProducts(): Promise<Product[]> {
 
 export async function getProductById(id: string): Promise<Product | null> {
   try {
-    const response = await fetch(`${process.env.VERCEL_URL || "http://localhost:3000"}/api/products/${id}`, {
+    const response = await fetch(`/api/products/${id}`, {
       cache: "no-store",
     })
 
@@ -39,7 +39,7 @@ export async function getProductById(id: string): Promise<Product | null> {
 
 export async function getInventoryStats(): Promise<InventoryStats> {
   try {
-    const response = await fetch(`${process.env.VERCEL_URL || "http://localhost:3000"}/api/stats`, {
+    const response = await fetch("/api/stats", {
       cache: "no-store",
     })
 
