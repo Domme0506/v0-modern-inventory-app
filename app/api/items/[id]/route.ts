@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server"
-import { prisma } from "@/lib/prisma"
+import prisma from "@/lib/prisma"
 
 export async function GET(request: Request, { params }: { params: { id: string } }) {
   try {
@@ -10,13 +10,13 @@ export async function GET(request: Request, { params }: { params: { id: string }
     })
 
     if (!item) {
-      return NextResponse.json({ error: "Item not found" }, { status: 404 })
+      return NextResponse.json({ error: "Artikel nicht gefunden" }, { status: 404 })
     }
 
     return NextResponse.json(item)
   } catch (error) {
-    console.error("Failed to fetch item:", error)
-    return NextResponse.json({ error: "Failed to fetch item" }, { status: 500 })
+    console.error("Fehler beim Laden des Artikels:", error)
+    return NextResponse.json({ error: "Fehler beim Laden des Artikels" }, { status: 500 })
   }
 }
 
@@ -37,8 +37,8 @@ export async function PUT(request: Request, { params }: { params: { id: string }
 
     return NextResponse.json(item)
   } catch (error) {
-    console.error("Failed to update item:", error)
-    return NextResponse.json({ error: "Failed to update item" }, { status: 500 })
+    console.error("Fehler beim Aktualisieren des Artikels:", error)
+    return NextResponse.json({ error: "Fehler beim Aktualisieren des Artikels" }, { status: 500 })
   }
 }
 
@@ -58,7 +58,7 @@ export async function DELETE(request: Request, { params }: { params: { id: strin
 
     return new NextResponse(null, { status: 204 })
   } catch (error) {
-    console.error("Failed to delete item:", error)
-    return NextResponse.json({ error: "Failed to delete item" }, { status: 500 })
+    console.error("Fehler beim Löschen des Artikels:", error)
+    return NextResponse.json({ error: "Fehler beim Löschen des Artikels" }, { status: 500 })
   }
 }

@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server"
-import { prisma } from "@/lib/prisma"
+import prisma from "@/lib/prisma"
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url)
@@ -20,8 +20,8 @@ export async function GET(request: Request) {
 
     return NextResponse.json(bookings)
   } catch (error) {
-    console.error("Failed to fetch bookings:", error)
-    return NextResponse.json({ error: "Failed to fetch bookings" }, { status: 500 })
+    console.error("Fehler beim Laden der Buchungen:", error)
+    return NextResponse.json({ error: "Fehler beim Laden der Buchungen" }, { status: 500 })
   }
 }
 
@@ -29,9 +29,9 @@ export async function POST(request: Request) {
   try {
     const body = await request.json()
 
-    // Start a transaction to update both booking and item
+    // Transaktion starten, um sowohl Buchung als auch Artikel zu aktualisieren
     const result = await prisma.$transaction(async (tx) => {
-      // Create booking
+      // Buchung erstellen
       const booking = await tx.booking.create({
         data: {
           itemId: body.itemId,
@@ -41,24 +41,24 @@ export async function POST(request: Request) {
         },
       })
 
-      // Update item quantity
+      // Artikel-Menge aktualisieren
       const item = await tx.item.findUnique({
         where: { id: body.itemId },
       })
 
       if (!item) {
-        throw new Error("Item not found")
+        throw new Error("Artikel nicht gefunden")
       }
 
-      // Calculate new quantity based on booking type
+      // Neue Menge basierend auf Buchungstyp berechnen
       const newQuantity = body.type === "in" ? item.quantity + body.quantity : item.quantity - body.quantity
 
-      // Ensure quantity doesn't go below zero
+      // Sicherstellen, dass die Menge nicht unter Null fällt
       if (newQuantity < 0) {
-        throw new Error("Insufficient quantity")
+        throw new Error("Unzureichende Menge")
       }
 
-      // Update item
+      // Artikel aktualisieren
       await tx.item.update({
         where: { id: body.itemId },
         data: { quantity: newQuantity },
@@ -69,15 +69,15 @@ export async function POST(request: Request) {
 
     return NextResponse.json(result, { status: 201 })
   } catch (error) {
-    console.error("Failed to create booking:", error)
+    console.error("Fehler beim Erstellen der Buchung:", error)
 
-    // Handle specific errors
+    // Spezifische Fehler behandeln
     if (error instanceof Error) {
-      if (error.message === "Insufficient quantity") {
-        return NextResponse.json({ error: "Insufficient quantity available" }, { status: 400 })
+      if (error.message === "Unzureichende Menge") {
+        return NextResponse.json({ error: "Unzureichende verfügbare Menge" }, { status: 400 })
       }
     }
 
-    return NextResponse.json({ error: "Failed to create booking" }, { status: 500 })
+    return NextResponse.json({ error: "Fehler beim Erstellen der Buchung" }, { status: 500 })
   }
 }

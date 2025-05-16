@@ -1,4 +1,4 @@
-import { prisma } from "./prisma"
+import prisma from "./prisma"
 import type { Item, Booking } from "./types"
 
 export async function getItems(

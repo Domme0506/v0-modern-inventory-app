@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server"
-import { prisma } from "@/lib/prisma"
+import prisma from "@/lib/prisma"
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url)
@@ -28,8 +28,8 @@ export async function GET(request: Request) {
 
     return NextResponse.json(items)
   } catch (error) {
-    console.error("Failed to fetch items:", error)
-    return NextResponse.json({ error: "Failed to fetch items" }, { status: 500 })
+    console.error("Fehler beim Laden der Artikel:", error)
+    return NextResponse.json({ error: "Fehler beim Laden der Artikel" }, { status: 500 })
   }
 }
 
@@ -47,7 +47,7 @@ export async function POST(request: Request) {
 
     return NextResponse.json(item, { status: 201 })
   } catch (error) {
-    console.error("Failed to create item:", error)
-    return NextResponse.json({ error: "Failed to create item" }, { status: 500 })
+    console.error("Fehler beim Erstellen des Artikels:", error)
+    return NextResponse.json({ error: "Fehler beim Erstellen des Artikels" }, { status: 500 })
   }
 }
