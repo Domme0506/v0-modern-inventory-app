@@ -1,23 +1,15 @@
 import { PrismaClient } from "@prisma/client"
 
-// Prevent multiple instances of Prisma Client in development
-declare global {
-  var prisma: PrismaClient | undefined
-}
+// PrismaClient ist an das globale Objekt angehängt, um zu verhindern,
+// dass zu viele Instanzen im Entwicklungsmodus erstellt werden
+const globalForPrisma = global as unknown as { prisma: PrismaClient }
 
-const prismaClientSingleton = () => {
-  return new PrismaClient()
-}
-
-type PrismaClientSingleton = ReturnType<typeof prismaClientSingleton>
-
-const globalForPrisma = globalThis as unknown as {
-  prisma: PrismaClientSingleton | undefined
-}
-
-export const prisma = globalForPrisma.prisma ?? prismaClientSingleton()
+export const prisma =
+  globalForPrisma.prisma ||
+  new PrismaClient({
+    log: ["query", "error", "warn"],
+  })
 
 if (process.env.NODE_ENV !== "production") globalForPrisma.prisma = prisma
 
-// Export a default instance for direct imports
 export default prisma

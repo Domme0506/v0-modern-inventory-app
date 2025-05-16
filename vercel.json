@@ -1,5 +1,5 @@
 {
-  "buildCommand": "npx prisma generate && next build",
-  "installCommand": "npm install --no-package-lock",
+  "buildCommand": "next build",
+  "installCommand": "node install.js",
   "framework": "nextjs"
 }
