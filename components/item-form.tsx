@@ -16,7 +16,9 @@ import { useToast } from "@/components/ui/use-toast"
 const formSchema = z.object({
   name: z.string().min(1, "Name ist erforderlich"),
   quantity: z.coerce.number().int().min(0, "Menge muss 0 oder größer sein"),
-  location: z.string().min(1, "Standort ist erforderlich"),
+  cabinet: z.string().min(1, "Schrank ist erforderlich"),
+  position: z.string().min(1, "Position ist erforderlich"),
+  side: z.string().min(1, "Seite ist erforderlich"),
 })
 
 // Schränke definieren
@@ -33,12 +35,7 @@ const cabinets = [
 ]
 
 const sides = ["links", "rechts"]
-const shelves = ["oben", "mitte", "unten"]
-
-// Alle möglichen Standorte generieren
-const locations = cabinets.flatMap((cabinet) =>
-  sides.flatMap((side) => shelves.map((shelf) => `${cabinet}, ${side} ${shelf}`)),
-)
+const positions = ["oben", "mitte", "unten"]
 
 interface ItemFormProps {
   item?: Item
@@ -49,13 +46,39 @@ export default function ItemForm({ item }: ItemFormProps) {
   const { toast } = useToast()
   const [isSubmitting, setIsSubmitting] = useState(false)
 
+  // Standort in seine Komponenten aufteilen, wenn ein Artikel bearbeitet wird
+  const parseLocation = (location?: string) => {
+    if (!location) return { cabinet: "", position: "", side: "" }
+
+    try {
+      // Format: "Schrank X, links/rechts oben/mitte/unten"
+      const parts = location.split(", ")
+      const cabinet = parts[0] // "Schrank X"
+
+      if (parts.length < 2) return { cabinet, position: "", side: "" }
+
+      const positionParts = parts[1].split(" ") // ["links/rechts", "oben/mitte/unten"]
+      const side = positionParts[0] // "links" oder "rechts"
+      const position = positionParts.length > 1 ? positionParts[1] : "" // "oben", "mitte" oder "unten"
+
+      return { cabinet, position, side }
+    } catch (error) {
+      console.error("Fehler beim Parsen des Standorts:", error)
+      return { cabinet: "", position: "", side: "" }
+    }
+  }
+
+  const locationParts = parseLocation(item?.location)
+
   // Formular mit Standardwerten oder vorhandenem Item initialisieren
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: item?.name || "",
       quantity: item?.quantity || 0,
-      location: item?.location || "",
+      cabinet: locationParts.cabinet || "",
+      position: locationParts.position || "",
+      side: locationParts.side || "",
     },
   })
 
@@ -63,8 +86,10 @@ export default function ItemForm({ item }: ItemFormProps) {
     setIsSubmitting(true)
 
     try {
-      const url = item ? `/api/items/${item.id}` : "/api/items"
+      // Standortkomponenten zu einem String zusammenführen
+      const location = `${values.cabinet}, ${values.side} ${values.position}`
 
+      const url = item ? `/api/items/${item.id}` : "/api/items"
       const method = item ? "PUT" : "POST"
 
       const response = await fetch(url, {
@@ -72,7 +97,11 @@ export default function ItemForm({ item }: ItemFormProps) {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(values),
+        body: JSON.stringify({
+          name: values.name,
+          quantity: values.quantity,
+          location: location,
+        }),
       })
 
       if (!response.ok) {
@@ -132,30 +161,82 @@ export default function ItemForm({ item }: ItemFormProps) {
           )}
         />
 
-        <FormField
-          control={form.control}
-          name="location"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Standort</FormLabel>
-              <Select onValueChange={field.onChange} defaultValue={field.value}>
-                <FormControl>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Standort auswählen" />
-                  </SelectTrigger>
-                </FormControl>
-                <SelectContent>
-                  {locations.map((location) => (
-                    <SelectItem key={location} value={location}>
-                      {location}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <FormField
+            control={form.control}
+            name="cabinet"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Schrank</FormLabel>
+                <Select onValueChange={field.onChange} defaultValue={field.value}>
+                  <FormControl>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Schrank auswählen" />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    {cabinets.map((cabinet) => (
+                      <SelectItem key={cabinet} value={cabinet}>
+                        {cabinet}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="side"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Seite</FormLabel>
+                <Select onValueChange={field.onChange} defaultValue={field.value}>
+                  <FormControl>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Seite auswählen" />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    {sides.map((side) => (
+                      <SelectItem key={side} value={side}>
+                        {side}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="position"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Position</FormLabel>
+                <Select onValueChange={field.onChange} defaultValue={field.value}>
+                  <FormControl>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Position auswählen" />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    {positions.map((position) => (
+                      <SelectItem key={position} value={position}>
+                        {position}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
 
         <div className="flex justify-end gap-2">
           <Button type="button" variant="outline" onClick={() => router.back()}>
