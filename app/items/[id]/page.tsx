@@ -13,7 +13,7 @@ export default async function ItemDetailPage({ params }: { params: { id: string 
 
   return (
     <div className="space-y-6">
-      <BackButton href="/items" label="Back to Items" />
+      <BackButton href="/items" label="Zurück zu Artikeln" />
 
       <div className="grid gap-6 md:grid-cols-2">
         <ItemDetail item={item} />

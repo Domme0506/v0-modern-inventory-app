@@ -20,9 +20,9 @@ import { Textarea } from "@/components/ui/textarea"
 import { useToast } from "@/components/ui/use-toast"
 import { ArrowDown, ArrowUp } from "lucide-react"
 
-// Define form schema
+// Formularschema definieren
 const formSchema = z.object({
-  quantity: z.coerce.number().int().positive("Quantity must be greater than 0"),
+  quantity: z.coerce.number().int().positive("Menge muss größer als 0 sein"),
   notes: z.string().optional(),
 })
 
@@ -37,7 +37,7 @@ export default function BookItemDialog({ item, type, onClose, onSuccess }: BookI
   const { toast } = useToast()
   const [isSubmitting, setIsSubmitting] = useState(false)
 
-  // Initialize form
+  // Formular initialisieren
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -46,17 +46,17 @@ export default function BookItemDialog({ item, type, onClose, onSuccess }: BookI
     },
   })
 
-  // Get form values
+  // Formularwerte abrufen
   const quantity = form.watch("quantity")
 
-  // Check if quantity is valid for booking out
+  // Prüfen, ob die Menge für die Ausbuchung gültig ist
   const isQuantityValid = type === "in" || (type === "out" && quantity <= item.quantity)
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     if (type === "out" && values.quantity > item.quantity) {
       form.setError("quantity", {
         type: "manual",
-        message: "Cannot book out more than available quantity",
+        message: "Kann nicht mehr ausbuchen als verfügbar ist",
       })
       return
     }
@@ -79,21 +79,21 @@ export default function BookItemDialog({ item, type, onClose, onSuccess }: BookI
 
       if (!response.ok) {
         const errorData = await response.json()
-        throw new Error(errorData.error || "Failed to book item")
+        throw new Error(errorData.error || "Fehler beim Buchen des Artikels")
       }
 
       toast({
-        title: "Success",
-        description: `Item ${type === "in" ? "booked in" : "booked out"} successfully`,
+        title: "Erfolg",
+        description: `Artikel erfolgreich ${type === "in" ? "eingebucht" : "ausgebucht"}`,
       })
 
       onSuccess()
       onClose()
     } catch (error) {
-      console.error("Error booking item:", error)
+      console.error("Fehler beim Buchen des Artikels:", error)
       toast({
-        title: "Error",
-        description: error instanceof Error ? error.message : "Failed to book item",
+        title: "Fehler",
+        description: error instanceof Error ? error.message : "Fehler beim Buchen des Artikels",
         variant: "destructive",
       })
     } finally {
@@ -109,19 +109,19 @@ export default function BookItemDialog({ item, type, onClose, onSuccess }: BookI
             {type === "in" ? (
               <span className="flex items-center">
                 <ArrowDown className="mr-2 h-5 w-5 text-green-500" />
-                Book In
+                Einbuchen
               </span>
             ) : (
               <span className="flex items-center">
                 <ArrowUp className="mr-2 h-5 w-5 text-red-500" />
-                Book Out
+                Ausbuchen
               </span>
             )}
           </DialogTitle>
           <DialogDescription>
             {type === "in"
-              ? `Add quantity to "${item.name}"`
-              : `Remove quantity from "${item.name}" (${item.quantity} available)`}
+              ? `Menge zu "${item.name}" hinzufügen`
+              : `Menge von "${item.name}" entfernen (${item.quantity} verfügbar)`}
           </DialogDescription>
         </DialogHeader>
 
@@ -132,7 +132,7 @@ export default function BookItemDialog({ item, type, onClose, onSuccess }: BookI
               name="quantity"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Quantity</FormLabel>
+                  <FormLabel>Menge</FormLabel>
                   <FormControl>
                     <Input type="number" min={1} max={type === "out" ? item.quantity : undefined} {...field} />
                   </FormControl>
@@ -146,9 +146,9 @@ export default function BookItemDialog({ item, type, onClose, onSuccess }: BookI
               name="notes"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Notes (Optional)</FormLabel>
+                  <FormLabel>Notizen (Optional)</FormLabel>
                   <FormControl>
-                    <Textarea placeholder="Add any additional information..." {...field} />
+                    <Textarea placeholder="Zusätzliche Informationen hinzufügen..." {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -157,7 +157,7 @@ export default function BookItemDialog({ item, type, onClose, onSuccess }: BookI
 
             <DialogFooter>
               <Button type="button" variant="outline" onClick={onClose}>
-                Cancel
+                Abbrechen
               </Button>
               <Button
                 type="submit"
@@ -169,12 +169,12 @@ export default function BookItemDialog({ item, type, onClose, onSuccess }: BookI
                     <span className="mr-2">
                       <span className="animate-spin inline-block h-4 w-4 border-2 border-current border-t-transparent rounded-full" />
                     </span>
-                    Processing...
+                    Verarbeite...
                   </>
                 ) : type === "in" ? (
-                  "Book In"
+                  "Einbuchen"
                 ) : (
-                  "Book Out"
+                  "Ausbuchen"
                 )}
               </Button>
             </DialogFooter>

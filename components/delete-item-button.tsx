@@ -35,21 +35,21 @@ export default function DeleteItemButton({ id }: DeleteItemButtonProps) {
       })
 
       if (!response.ok) {
-        throw new Error("Failed to delete item")
+        throw new Error("Fehler beim Löschen des Artikels")
       }
 
       toast({
-        title: "Success",
-        description: "Item deleted successfully",
+        title: "Erfolg",
+        description: "Artikel erfolgreich gelöscht",
       })
 
       router.push("/items")
       router.refresh()
     } catch (error) {
-      console.error("Error deleting item:", error)
+      console.error("Fehler beim Löschen des Artikels:", error)
       toast({
-        title: "Error",
-        description: "Failed to delete item",
+        title: "Fehler",
+        description: "Fehler beim Löschen des Artikels",
         variant: "destructive",
       })
     } finally {
@@ -66,15 +66,15 @@ export default function DeleteItemButton({ id }: DeleteItemButtonProps) {
       </AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle>Delete Item</AlertDialogTitle>
+          <AlertDialogTitle>Artikel löschen</AlertDialogTitle>
           <AlertDialogDescription>
-            Are you sure you want to delete this item? This action cannot be undone.
+            Sind Sie sicher, dass Sie diesen Artikel löschen möchten? Diese Aktion kann nicht rückgängig gemacht werden.
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel>Cancel</AlertDialogCancel>
+          <AlertDialogCancel>Abbrechen</AlertDialogCancel>
           <AlertDialogAction onClick={handleDelete} className="bg-red-500 hover:bg-red-600" disabled={isDeleting}>
-            {isDeleting ? "Deleting..." : "Delete"}
+            {isDeleting ? "Löschen..." : "Löschen"}
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>

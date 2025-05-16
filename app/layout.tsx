@@ -7,8 +7,8 @@ import Navbar from "@/components/navbar"
 const inter = Inter({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
-  title: "Inventory Manager",
-  description: "Modern inventory management system",
+  title: "Inventarverwaltung",
+  description: "Modernes System zur Inventarverwaltung",
     generator: 'v0.dev'
 }
 
@@ -18,7 +18,7 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en">
+    <html lang="de">
       <body className={`${inter.className} min-h-screen bg-gray-50`}>
         <Navbar />
         <main className="container mx-auto px-4 py-8">{children}</main>

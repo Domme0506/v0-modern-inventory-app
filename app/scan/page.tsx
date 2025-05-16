@@ -12,7 +12,7 @@ export default function ScanPage() {
 
   const handleScan = (data: string | null) => {
     if (data) {
-      // Assuming the QR code contains a location string
+      // Annahme: Der QR-Code enthält einen Standort-String
       router.push(`/items?location=${encodeURIComponent(data)}`)
     }
   }
@@ -25,17 +25,19 @@ export default function ScanPage() {
     <div className="space-y-6">
       <Button variant="outline" onClick={() => router.back()} className="mb-4">
         <ArrowLeft className="mr-2 h-4 w-4" />
-        Back
+        Zurück
       </Button>
 
       <div className="border rounded-lg p-6 bg-white shadow-sm">
-        <h1 className="text-2xl font-bold mb-6">Scan QR Code</h1>
+        <h1 className="text-2xl font-bold mb-6">QR-Code scannen</h1>
         <div className="max-w-md mx-auto">
           <QrScanner onScan={handleScan} onError={handleError} />
 
-          {error && <div className="mt-4 p-4 bg-red-50 text-red-700 rounded-md">Error: {error}</div>}
+          {error && <div className="mt-4 p-4 bg-red-50 text-red-700 rounded-md">Fehler: {error}</div>}
 
-          <p className="mt-4 text-sm text-gray-500">Scan a QR code to view all items at that location.</p>
+          <p className="mt-4 text-sm text-gray-500">
+            Scannen Sie einen QR-Code, um alle Artikel an diesem Standort anzuzeigen.
+          </p>
         </div>
       </div>
     </div>

@@ -7,7 +7,7 @@ export default function QrScanButton() {
     <Button variant="outline" asChild>
       <Link href="/scan">
         <QrCode className="mr-2 h-4 w-4" />
-        Scan QR
+        QR-Code scannen
       </Link>
     </Button>
   )

@@ -1,13 +1,15 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
+// Dies ist Ihre Prisma-Schema-Datei,
+// mehr dazu in der Dokumentation: https://pris.ly/d/prisma-schema
 
 generator client {
   provider = "prisma-client-js"
+  output   = "./client"
 }
 
 datasource db {
-  provider = "sqlite"
-  url      = env("DATABASE_URL")
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("POSTGRES_URL_NON_POOLING") // Für Migrationen verwendet
 }
 
 model Item {
@@ -24,7 +26,7 @@ model Booking {
   id        Int      @id @default(autoincrement())
   itemId    Int
   quantity  Int
-  type      String   // 'in' or 'out'
+  type      String   // 'in' oder 'out'
   notes     String?
   createdAt DateTime @default(now())
   item      Item     @relation(fields: [itemId], references: [id])

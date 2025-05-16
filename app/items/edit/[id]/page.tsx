@@ -12,9 +12,9 @@ export default async function EditItemPage({ params }: { params: { id: string } 
 
   return (
     <div className="space-y-6 max-w-2xl mx-auto">
-      <BackButton href={`/items/${params.id}`} label="Back to Item" />
+      <BackButton href={`/items/${params.id}`} label="Zurück zum Artikel" />
       <div className="border rounded-lg p-6 bg-white shadow-sm">
-        <h1 className="text-2xl font-bold mb-6">Edit Item</h1>
+        <h1 className="text-2xl font-bold mb-6">Artikel bearbeiten</h1>
         <ItemForm item={item} />
       </div>
     </div>

@@ -8,7 +8,7 @@ export default function ItemsPage() {
   return (
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-        <h1 className="text-2xl font-bold tracking-tight">Inventory Items</h1>
+        <h1 className="text-2xl font-bold tracking-tight">Inventarartikel</h1>
         <div className="flex flex-wrap gap-2">
           <QrScanButton />
           <AddItemButton />

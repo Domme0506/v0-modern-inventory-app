@@ -27,20 +27,20 @@ export default function ItemDetail({ item }: ItemDetailProps) {
         <div className="grid gap-4">
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-1">
-              <p className="text-sm text-muted-foreground">Quantity</p>
+              <p className="text-sm text-muted-foreground">Menge</p>
               <p className="text-lg font-medium">{item.quantity}</p>
             </div>
             <div className="space-y-1">
-              <p className="text-sm text-muted-foreground">Location</p>
+              <p className="text-sm text-muted-foreground">Standort</p>
               <p className="text-lg font-medium">{item.location}</p>
             </div>
           </div>
           <div className="space-y-1">
-            <p className="text-sm text-muted-foreground">Created</p>
+            <p className="text-sm text-muted-foreground">Erstellt</p>
             <p className="text-sm">{new Date(item.createdAt).toLocaleString()}</p>
           </div>
           <div className="space-y-1">
-            <p className="text-sm text-muted-foreground">Last Updated</p>
+            <p className="text-sm text-muted-foreground">Zuletzt aktualisiert</p>
             <p className="text-sm">{new Date(item.updatedAt).toLocaleString()}</p>
           </div>
         </div>

@@ -21,15 +21,15 @@ export default function ItemHistory({ itemId }: ItemHistoryProps) {
       setLoading(true)
       try {
         const response = await fetch(`/api/bookings?itemId=${itemId}`)
-        if (!response.ok) throw new Error("Failed to fetch bookings")
+        if (!response.ok) throw new Error("Fehler beim Laden der Buchungen")
 
         const data = await response.json()
         setBookings(data)
       } catch (error) {
-        console.error("Error fetching bookings:", error)
+        console.error("Fehler beim Laden der Buchungen:", error)
         toast({
-          title: "Error",
-          description: "Failed to load item history",
+          title: "Fehler",
+          description: "Fehler beim Laden der Artikelhistorie",
           variant: "destructive",
         })
       } finally {
@@ -43,7 +43,7 @@ export default function ItemHistory({ itemId }: ItemHistoryProps) {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Item History</CardTitle>
+        <CardTitle>Artikelhistorie</CardTitle>
       </CardHeader>
       <CardContent>
         {loading ? (
@@ -51,15 +51,15 @@ export default function ItemHistory({ itemId }: ItemHistoryProps) {
             <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
           </div>
         ) : bookings.length === 0 ? (
-          <p className="text-center py-8 text-muted-foreground">No history available for this item.</p>
+          <p className="text-center py-8 text-muted-foreground">Keine Historie für diesen Artikel verfügbar.</p>
         ) : (
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>Date</TableHead>
-                <TableHead>Type</TableHead>
-                <TableHead className="text-right">Quantity</TableHead>
-                <TableHead>Notes</TableHead>
+                <TableHead>Datum</TableHead>
+                <TableHead>Typ</TableHead>
+                <TableHead className="text-right">Menge</TableHead>
+                <TableHead>Notizen</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -73,7 +73,7 @@ export default function ItemHistory({ itemId }: ItemHistoryProps) {
                       ) : (
                         <ArrowUp className="mr-1 h-4 w-4 text-red-500" />
                       )}
-                      {booking.type === "in" ? "In" : "Out"}
+                      {booking.type === "in" ? "Eingang" : "Ausgang"}
                     </div>
                   </TableCell>
                   <TableCell className="text-right">{booking.quantity}</TableCell>

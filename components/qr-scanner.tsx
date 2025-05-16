@@ -15,11 +15,11 @@ export function QrScanner({ onScan, onError }: QrScannerProps) {
   const [html5QrCode, setHtml5QrCode] = useState<Html5Qrcode | null>(null)
 
   useEffect(() => {
-    // Initialize scanner
+    // Scanner initialisieren
     const qrCodeScanner = new Html5Qrcode("qr-reader")
     setHtml5QrCode(qrCodeScanner)
 
-    // Cleanup on unmount
+    // Aufräumen beim Unmount
     return () => {
       if (qrCodeScanner.isScanning) {
         qrCodeScanner.stop().catch(console.error)
@@ -40,19 +40,19 @@ export function QrScanner({ onScan, onError }: QrScannerProps) {
           qrbox: { width: 250, height: 250 },
         },
         (decodedText) => {
-          // Success callback
+          // Erfolgs-Callback
           onScan(decodedText)
           stopScanner()
         },
         (errorMessage) => {
-          // Error callback is called continuously while scanning
-          // We don't want to spam the user with errors
+          // Fehler-Callback wird kontinuierlich während des Scannens aufgerufen
+          // Wir wollen den Benutzer nicht mit Fehlern überhäufen
           console.log(errorMessage)
         },
       )
     } catch (err) {
       setScanning(false)
-      onError(err instanceof Error ? err : new Error("Failed to start scanner"))
+      onError(err instanceof Error ? err : new Error("Fehler beim Starten des Scanners"))
     }
   }
 
@@ -61,7 +61,7 @@ export function QrScanner({ onScan, onError }: QrScannerProps) {
       try {
         await html5QrCode.stop()
       } catch (err) {
-        console.error("Error stopping scanner:", err)
+        console.error("Fehler beim Stoppen des Scanners:", err)
       }
       setScanning(false)
     }
@@ -75,12 +75,12 @@ export function QrScanner({ onScan, onError }: QrScannerProps) {
         {scanning ? (
           <Button variant="destructive" onClick={stopScanner}>
             <StopCircle className="mr-2 h-4 w-4" />
-            Stop Scanning
+            Scannen beenden
           </Button>
         ) : (
           <Button onClick={startScanner}>
             <Camera className="mr-2 h-4 w-4" />
-            Start Scanning
+            Scannen starten
           </Button>
         )}
       </div>

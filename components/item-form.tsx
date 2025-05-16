@@ -12,31 +12,30 @@ import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { useToast } from "@/components/ui/use-toast"
 
-// Define form schema
+// Formularschema definieren
 const formSchema = z.object({
-  name: z.string().min(1, "Name is required"),
-  quantity: z.coerce.number().int().min(0, "Quantity must be 0 or greater"),
-  location: z.string().min(1, "Location is require  'Quantity must be 0 or greater"),
-  location: z.string().min(1, "Location is required"),
+  name: z.string().min(1, "Name ist erforderlich"),
+  quantity: z.coerce.number().int().min(0, "Menge muss 0 oder größer sein"),
+  location: z.string().min(1, "Standort ist erforderlich"),
 })
 
-// Define cabinet locations
+// Schränke definieren
 const cabinets = [
-  "Cabinet 1",
-  "Cabinet 2",
-  "Cabinet 3",
-  "Cabinet 4",
-  "Cabinet 5",
-  "Cabinet 6",
-  "Cabinet 7",
-  "Cabinet 8",
-  "Cabinet 9",
+  "Schrank 1",
+  "Schrank 2",
+  "Schrank 3",
+  "Schrank 4",
+  "Schrank 5",
+  "Schrank 6",
+  "Schrank 7",
+  "Schrank 8",
+  "Schrank 9",
 ]
 
-const sides = ["left", "right"]
-const shelves = ["top", "middle", "bottom"]
+const sides = ["links", "rechts"]
+const shelves = ["oben", "mitte", "unten"]
 
-// Generate all possible locations
+// Alle möglichen Standorte generieren
 const locations = cabinets.flatMap((cabinet) =>
   sides.flatMap((side) => shelves.map((shelf) => `${cabinet}, ${side} ${shelf}`)),
 )
@@ -50,7 +49,7 @@ export default function ItemForm({ item }: ItemFormProps) {
   const { toast } = useToast()
   const [isSubmitting, setIsSubmitting] = useState(false)
 
-  // Initialize form with default values or existing item
+  // Formular mit Standardwerten oder vorhandenem Item initialisieren
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -77,24 +76,24 @@ export default function ItemForm({ item }: ItemFormProps) {
       })
 
       if (!response.ok) {
-        throw new Error("Failed to save item")
+        throw new Error("Fehler beim Speichern des Artikels")
       }
 
       const savedItem = await response.json()
 
       toast({
-        title: "Success",
-        description: item ? "Item updated successfully" : "Item created successfully",
+        title: "Erfolg",
+        description: item ? "Artikel erfolgreich aktualisiert" : "Artikel erfolgreich erstellt",
       })
 
-      // Redirect to item detail or items list
+      // Weiterleitung zur Artikeldetailseite oder Artikelliste
       router.push(item ? `/items/${item.id}` : "/items")
       router.refresh()
     } catch (error) {
-      console.error("Error saving item:", error)
+      console.error("Fehler beim Speichern des Artikels:", error)
       toast({
-        title: "Error",
-        description: "Failed to save item",
+        title: "Fehler",
+        description: "Fehler beim Speichern des Artikels",
         variant: "destructive",
       })
     } finally {
@@ -112,7 +111,7 @@ export default function ItemForm({ item }: ItemFormProps) {
             <FormItem>
               <FormLabel>Name</FormLabel>
               <FormControl>
-                <Input placeholder="Item name" {...field} />
+                <Input placeholder="Artikelname" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -124,7 +123,7 @@ export default function ItemForm({ item }: ItemFormProps) {
           name="quantity"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Quantity</FormLabel>
+              <FormLabel>Menge</FormLabel>
               <FormControl>
                 <Input type="number" min={0} placeholder="0" {...field} />
               </FormControl>
@@ -138,11 +137,11 @@ export default function ItemForm({ item }: ItemFormProps) {
           name="location"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Location</FormLabel>
+              <FormLabel>Standort</FormLabel>
               <Select onValueChange={field.onChange} defaultValue={field.value}>
                 <FormControl>
                   <SelectTrigger>
-                    <SelectValue placeholder="Select a location" />
+                    <SelectValue placeholder="Standort auswählen" />
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
@@ -160,7 +159,7 @@ export default function ItemForm({ item }: ItemFormProps) {
 
         <div className="flex justify-end gap-2">
           <Button type="button" variant="outline" onClick={() => router.back()}>
-            Cancel
+            Abbrechen
           </Button>
           <Button type="submit" disabled={isSubmitting}>
             {isSubmitting ? (
@@ -168,12 +167,12 @@ export default function ItemForm({ item }: ItemFormProps) {
                 <span className="mr-2">
                   <span className="animate-spin inline-block h-4 w-4 border-2 border-current border-t-transparent rounded-full" />
                 </span>
-                {item ? "Updating..." : "Creating..."}
+                {item ? "Aktualisiere..." : "Erstelle..."}
               </>
             ) : item ? (
-              "Update Item"
+              "Artikel aktualisieren"
             ) : (
-              "Create Item"
+              "Artikel erstellen"
             )}
           </Button>
         </div>

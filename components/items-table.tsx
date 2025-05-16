@@ -38,7 +38,7 @@ export default function ItemsTable() {
   const [selectedItem, setSelectedItem] = useState<Item | null>(null)
   const [bookingType, setBookingType] = useState<"in" | "out">("in")
 
-  // Get location from URL if present
+  // Standort aus URL holen, falls vorhanden
   const locationFilter = searchParams.get("location")
 
   useEffect(() => {
@@ -55,15 +55,15 @@ export default function ItemsTable() {
       if (locationFilter) params.append("location", locationFilter)
 
       const response = await fetch(`/api/items?${params.toString()}`)
-      if (!response.ok) throw new Error("Failed to fetch items")
+      if (!response.ok) throw new Error("Fehler beim Laden der Artikel")
 
       const data = await response.json()
       setItems(data)
     } catch (error) {
-      console.error("Error fetching items:", error)
+      console.error("Fehler beim Laden der Artikel:", error)
       toast({
-        title: "Error",
-        description: "Failed to load items",
+        title: "Fehler",
+        description: "Fehler beim Laden der Artikel",
         variant: "destructive",
       })
     } finally {
@@ -83,7 +83,7 @@ export default function ItemsTable() {
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault()
 
-    // Update URL with search params
+    // URL mit Suchparametern aktualisieren
     const params = new URLSearchParams(searchParams)
     if (searchTerm) {
       params.set("search", searchTerm)
@@ -97,7 +97,7 @@ export default function ItemsTable() {
   const clearSearch = () => {
     setSearchTerm("")
 
-    // Remove search param from URL
+    // Suchparameter aus URL entfernen
     const params = new URLSearchParams(searchParams)
     params.delete("search")
     router.push(`/items?${params.toString()}`)
@@ -109,20 +109,20 @@ export default function ItemsTable() {
         method: "DELETE",
       })
 
-      if (!response.ok) throw new Error("Failed to delete item")
+      if (!response.ok) throw new Error("Fehler beim Löschen des Artikels")
 
-      // Remove item from state
+      // Artikel aus dem State entfernen
       setItems(items.filter((item) => item.id !== id))
 
       toast({
-        title: "Success",
-        description: "Item deleted successfully",
+        title: "Erfolg",
+        description: "Artikel erfolgreich gelöscht",
       })
     } catch (error) {
-      console.error("Error deleting item:", error)
+      console.error("Fehler beim Löschen des Artikels:", error)
       toast({
-        title: "Error",
-        description: "Failed to delete item",
+        title: "Fehler",
+        description: "Fehler beim Löschen des Artikels",
         variant: "destructive",
       })
     }
@@ -141,11 +141,11 @@ export default function ItemsTable() {
 
   return (
     <div className="space-y-4">
-      {/* Location filter indicator */}
+      {/* Standortfilter-Anzeige */}
       {locationFilter && (
         <div className="bg-blue-50 p-3 rounded-md flex items-center justify-between">
           <div>
-            <span className="font-medium">Filtered by location:</span> {locationFilter}
+            <span className="font-medium">Gefiltert nach Standort:</span> {locationFilter}
           </div>
           <Button
             variant="ghost"
@@ -157,18 +157,18 @@ export default function ItemsTable() {
             }}
           >
             <X className="h-4 w-4 mr-1" />
-            Clear filter
+            Filter löschen
           </Button>
         </div>
       )}
 
-      {/* Search form */}
+      {/* Suchformular */}
       <form onSubmit={handleSearch} className="flex gap-2">
         <div className="relative flex-1">
           <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-gray-500" />
           <Input
             type="text"
-            placeholder="Search items by name or location..."
+            placeholder="Artikel nach Name oder Standort suchen..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             className="pl-9"
@@ -183,10 +183,10 @@ export default function ItemsTable() {
             </button>
           )}
         </div>
-        <Button type="submit">Search</Button>
+        <Button type="submit">Suchen</Button>
       </form>
 
-      {/* Items table */}
+      {/* Artikeltabelle */}
       <div className="border rounded-md">
         <Table>
           <TableHeader>
@@ -199,17 +199,17 @@ export default function ItemsTable() {
               </TableHead>
               <TableHead className="cursor-pointer text-right" onClick={() => handleSort("quantity")}>
                 <div className="flex items-center justify-end">
-                  Quantity
+                  Menge
                   {renderSortIcon("quantity")}
                 </div>
               </TableHead>
               <TableHead className="cursor-pointer" onClick={() => handleSort("location")}>
                 <div className="flex items-center">
-                  Location
+                  Standort
                   {renderSortIcon("location")}
                 </div>
               </TableHead>
-              <TableHead className="text-right">Actions</TableHead>
+              <TableHead className="text-right">Aktionen</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -224,9 +224,9 @@ export default function ItemsTable() {
             ) : items.length === 0 ? (
               <TableRow>
                 <TableCell colSpan={4} className="text-center py-8">
-                  No items found.
+                  Keine Artikel gefunden.
                   <Link href="/items/add" className="text-primary hover:underline ml-1">
-                    Add your first item
+                    Ersten Artikel hinzufügen
                   </Link>
                 </TableCell>
               </TableRow>
@@ -251,14 +251,19 @@ export default function ItemsTable() {
                   <TableCell>{item.location}</TableCell>
                   <TableCell>
                     <div className="flex justify-end gap-2">
-                      <Button variant="outline" size="icon" onClick={() => openBookDialog(item, "in")} title="Book in">
+                      <Button
+                        variant="outline"
+                        size="icon"
+                        onClick={() => openBookDialog(item, "in")}
+                        title="Einbuchen"
+                      >
                         <Plus className="h-4 w-4" />
                       </Button>
                       <Button
                         variant="outline"
                         size="icon"
                         onClick={() => openBookDialog(item, "out")}
-                        title="Book out"
+                        title="Ausbuchen"
                         disabled={item.quantity <= 0}
                       >
                         <Minus className="h-4 w-4" />
@@ -276,18 +281,19 @@ export default function ItemsTable() {
                         </AlertDialogTrigger>
                         <AlertDialogContent>
                           <AlertDialogHeader>
-                            <AlertDialogTitle>Delete Item</AlertDialogTitle>
+                            <AlertDialogTitle>Artikel löschen</AlertDialogTitle>
                             <AlertDialogDescription>
-                              Are you sure you want to delete "{item.name}"? This action cannot be undone.
+                              Sind Sie sicher, dass Sie "{item.name}" löschen möchten? Diese Aktion kann nicht
+                              rückgängig gemacht werden.
                             </AlertDialogDescription>
                           </AlertDialogHeader>
                           <AlertDialogFooter>
-                            <AlertDialogCancel>Cancel</AlertDialogCancel>
+                            <AlertDialogCancel>Abbrechen</AlertDialogCancel>
                             <AlertDialogAction
                               onClick={() => handleDelete(item.id)}
                               className="bg-red-500 hover:bg-red-600"
                             >
-                              Delete
+                              Löschen
                             </AlertDialogAction>
                           </AlertDialogFooter>
                         </AlertDialogContent>
@@ -301,7 +307,7 @@ export default function ItemsTable() {
         </Table>
       </div>
 
-      {/* Booking dialog */}
+      {/* Buchungsdialog */}
       {selectedItem && (
         <BookItemDialog
           item={selectedItem}

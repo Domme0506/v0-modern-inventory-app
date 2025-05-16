@@ -15,12 +15,12 @@ export default function Navbar() {
 
   const navItems = [
     {
-      name: "Items",
+      name: "Artikel",
       href: "/items",
       icon: <Boxes className="h-5 w-5 mr-2" />,
     },
     {
-      name: "Scan QR",
+      name: "QR-Code scannen",
       href: "/scan",
       icon: <QrCode className="h-5 w-5 mr-2" />,
     },
@@ -33,11 +33,11 @@ export default function Navbar() {
           <div className="flex items-center">
             <Link href="/" className="flex items-center">
               <Boxes className="h-8 w-8 text-primary" />
-              <span className="ml-2 text-xl font-bold">Inventory Manager</span>
+              <span className="ml-2 text-xl font-bold">Inventarverwaltung</span>
             </Link>
           </div>
 
-          {/* Desktop navigation */}
+          {/* Desktop-Navigation */}
           <div className="hidden md:flex space-x-4">
             {navItems.map((item) => (
               <Link
@@ -56,16 +56,16 @@ export default function Navbar() {
             ))}
           </div>
 
-          {/* Mobile menu button */}
+          {/* Mobile-Menü-Button */}
           <div className="md:hidden">
-            <Button variant="ghost" size="icon" onClick={toggleMenu} aria-label="Toggle menu">
+            <Button variant="ghost" size="icon" onClick={toggleMenu} aria-label="Menü umschalten">
               {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
             </Button>
           </div>
         </div>
       </div>
 
-      {/* Mobile menu */}
+      {/* Mobile-Menü */}
       {isMenuOpen && (
         <div className="md:hidden bg-white pt-2 pb-4 px-4 space-y-1">
           {navItems.map((item) => (
